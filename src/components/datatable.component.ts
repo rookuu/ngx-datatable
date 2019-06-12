@@ -3,7 +3,7 @@ import {
   HostListener, ContentChildren, OnInit, QueryList, AfterViewInit,
   HostBinding, ContentChild, TemplateRef, IterableDiffer,
   DoCheck, KeyValueDiffers, KeyValueDiffer, ViewEncapsulation,
-  ChangeDetectionStrategy, ChangeDetectorRef, SkipSelf, OnDestroy, Optional, Inject
+  ChangeDetectionStrategy, ChangeDetectorRef, SkipSelf, OnDestroy
 } from '@angular/core';
 
 import {
@@ -21,7 +21,6 @@ import { DatatableFooterDirective } from './footer';
 import { DataTableHeaderComponent } from './header';
 import { MouseEvent } from '../events';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import {INgxDatatableConfig} from "../datatable.module";
 
 @Component({
   selector: 'ngx-datatable',
@@ -395,7 +394,13 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    *
    * (`fn(x) === fn(y)` instead of `x === y`)
    */
-  @Input() rowIdentity: (x: any) => any = ((x: any) => x);
+  @Input() rowIdentity: (x: any) => any = ((x: any) => {
+ 	if (this._groupRowsBy) {
+	  return x.key;
+	} else {
+	  return x;
+	}
+  });
 
   /**
    * Row specific classes.
@@ -641,26 +646,26 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
   /**
    * Row Detail templates gathered from the ContentChild
    */
-  @ContentChild(DatatableRowDetailDirective, { static: false })
+  @ContentChild(DatatableRowDetailDirective)
   rowDetail: DatatableRowDetailDirective;
 
   /**
    * Group Header templates gathered from the ContentChild
    */
-  @ContentChild(DatatableGroupHeaderDirective, { static: false })
+  @ContentChild(DatatableGroupHeaderDirective)
   groupHeader: DatatableGroupHeaderDirective;
 
   /**
    * Footer template gathered from the ContentChild
    */
-  @ContentChild(DatatableFooterDirective, { static: false })
+  @ContentChild(DatatableFooterDirective)
   footer: DatatableFooterDirective;
 
   /**
    * Reference to the body component for manually
    * invoking functions on the body.
    */
-  @ViewChild(DataTableBodyComponent, { static: false })
+  @ViewChild(DataTableBodyComponent)
   bodyComponent: DataTableBodyComponent;
 
   /**
@@ -671,7 +676,7 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
    * @type {DataTableHeaderComponent}
    * @memberOf DatatableComponent
    */
-  @ViewChild(DataTableHeaderComponent, { static: false })
+  @ViewChild(DataTableHeaderComponent)
   headerComponent: DataTableHeaderComponent;
 
   /**
@@ -715,17 +720,11 @@ export class DatatableComponent implements OnInit, DoCheck, AfterViewInit {
     private cd: ChangeDetectorRef,
     element: ElementRef,
     differs: KeyValueDiffers,
-    private columnChangesService: ColumnChangesService,
-    @Optional() @Inject('configuration') private configuration: INgxDatatableConfig) {
+    private columnChangesService: ColumnChangesService) {
 
     // get ref to elm for measuring
     this.element = element.nativeElement;
     this.rowDiffer = differs.find({}).create();
-
-    // apply global settings from Module.forRoot
-    if (this.configuration && this.configuration.messages) {
-      this.messages = {...this.configuration.messages};
-    }
   }
 
   /**

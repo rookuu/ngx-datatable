@@ -118,7 +118,7 @@ export class DataTableBodyRowComponent implements DoCheck {
   _offsetX: number;
   _columns: any[];
   _innerWidth: number;
-  _groupStyles: {[prop: string]: {}} = {
+  _groupStyles = {
     left: {},
     center: {},
     right: {}
@@ -150,9 +150,9 @@ export class DataTableBodyRowComponent implements DoCheck {
   }
 
   buildStylesByGroup() {
-    this._groupStyles.left = this.calcStylesByGroup('left');
-    this._groupStyles.center = this.calcStylesByGroup('center');
-    this._groupStyles.right = this.calcStylesByGroup('right');
+    this._groupStyles['left'] = this.calcStylesByGroup('left');
+    this._groupStyles['center'] = this.calcStylesByGroup('center');
+    this._groupStyles['right'] = this.calcStylesByGroup('right');
     this.cd.markForCheck();
   }
 

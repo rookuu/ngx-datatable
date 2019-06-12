@@ -249,25 +249,23 @@ describe('DataTableFooterComponent', () => {
       [selectedCount]="selectedCount"
       [selectedMessage]="selectedMessage"
       [pagerNextIcon]="pagerNextIcon"
-      (page)="onPageEvent($event)"
-    >
+      (page)="onPageEvent($event)">
     </datatable-footer>
-
+    
     <ng-template
       #testTemplate
       let-rowCount="rowCount"
       let-pageSize="pageSize"
       let-selectedCount="selectedCount"
       let-curPage="curPage"
-      let-offset="offset"
-    >
-      <ul id="template-list">
-        <li>rowCount {{ rowCount }}</li>
-        <li>pageSize {{ pageSize }}</li>
-        <li>selectedCount {{ selectedCount }}</li>
-        <li>curPage {{ curPage }}</li>
-        <li>offset {{ offset }}</li>
-      </ul>
+      let-offset="offset">
+        <ul id="template-list">
+          <li>rowCount {{rowCount}}</li>
+          <li>pageSize {{pageSize}}</li>
+          <li>selectedCount {{selectedCount}}</li>
+          <li>curPage {{curPage}}</li>
+          <li>offset {{offset}}</li>
+        </ul>
     </ng-template>
   `
 })
@@ -290,7 +288,7 @@ class TestFixtureComponent {
    * selectively be passed to the DatatableFooterComponent
    * in these unit tests
    */
-  @ViewChild('testTemplate', { read: TemplateRef, static: true })
+  @ViewChild('testTemplate', { read: TemplateRef })
   testTemplate: TemplateRef<any>;
 
   onPageEvent() {

@@ -1,15 +1,9 @@
-import {
-  Input,
-  Output,
-  EventEmitter,
-  Directive,
-  TemplateRef,
-  ContentChild
-} from '@angular/core';
+import { Input, Output, EventEmitter, Directive, TemplateRef, ContentChild } from '@angular/core';
 import { DataTableFooterTemplateDirective } from './footer-template.directive';
 
 @Directive({ selector: 'ngx-datatable-footer' })
 export class DatatableFooterDirective {
+
   @Input() footerHeight: number;
   @Input() totalMessage: string;
   @Input() selectedMessage: string | boolean;
@@ -18,13 +12,8 @@ export class DatatableFooterDirective {
   @Input() pagerPreviousIcon: string;
   @Input() pagerNextIcon: string;
 
-  @Input('template')
-  _templateInput: TemplateRef<any>;
+  @Input()
+  @ContentChild(DataTableFooterTemplateDirective, { read: TemplateRef }) 
+  template: TemplateRef<any>;
 
-  @ContentChild(DataTableFooterTemplateDirective, { read: TemplateRef, static: false })
-  _templateQuery: TemplateRef<any>;
-
-  get template(): TemplateRef<any> {
-    return this._templateInput || this._templateQuery;
-  }
 }
